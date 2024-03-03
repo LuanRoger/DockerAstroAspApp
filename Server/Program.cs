@@ -1,44 +1,78 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Server.Context;
+using Server.Models;
+using Server.Models.Requests;
+using Server.Models.Responses;
+using Server.Utils;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    string connectionString = Env.GetConnectionString ?? 
+                              string.Empty;
+    optionsBuilder.UseNpgsql(connectionString);
+});
+
+WebApplication app = builder.Build();
+
+using (IServiceScope serviceScope = app.Services.CreateScope())
+{
+    AppDbContext dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.EnsureCreated();
 }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+RouteGroupBuilder userGroup = app.MapGroup("user");
+userGroup.MapGet("/", (HttpContext _, 
+    [FromQuery] int page, 
+    [FromQuery] int pageSize,
+    [FromServices] AppDbContext dbContext) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var users = dbContext.users
+        .AsNoTracking()
+        .Skip(pageSize * (page - 1)).Take(pageSize)
+        .OrderBy(f => f.id)
+        .ToList();
+    
+    return Results.Ok(users);
+});
+userGroup.MapGet("/{id:int}", (HttpContext _,
+    [FromRoute] int id,
+    [FromServices] AppDbContext dbContext) =>
+{
+    User? user = dbContext.users.Find(id);
+    if(user is null)
+        return Results.NotFound();
 
-app.MapGet("/weatherforecast", () =>
+    UserResponse response = new()
+    {
+        name = user.name,
+        email = user.email
+    };
+    
+    return Results.Ok(response);
+});
+userGroup.MapPost("/", (
+    HttpContext _, 
+    [FromBody] PostUserRequest body,
+    [FromServices] AppDbContext dbContext) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    if(string.IsNullOrEmpty(body.email) || string.IsNullOrEmpty(body.name))
+        return Results.BadRequest("Name and email are required");
+
+    User newUser = new()
+    {
+        name = body.name,
+        email = body.email
+    };
+
+    dbContext.users.Add(newUser);
+    dbContext.SaveChanges();
+    
+    return Results.Created($"/user/{newUser.id}", newUser);
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -1,0 +1,17 @@
+---
+import ReloadTableButton from "./ReloadTableButton";
+
+interface Props {
+  title?: string | undefined;
+}
+
+const { title } = Astro.props;
+const defaultTitle = "Astro";
+---
+
+<nav class="flex flex-row justify-between items-center w-full p-3 bg-slate-900 text-white">
+  <h1 class="text-xl font-bold">{title ?? defaultTitle}</h1>
+  <aside>
+    <ReloadTableButton client:idle />
+  </aside>
+</nav>

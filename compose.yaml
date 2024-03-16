@@ -6,15 +6,28 @@ networks:
     driver: bridge
 
 services:
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - PUBLIC_API_ENDPOINT=http://api:8080
+    ports:
+      - 8080:80
+    networks:
+      - api_net
+
   api:
     container_name: api
     build:
       context: ./Server
       dockerfile: Dockerfile
+    restart: unless-stopped
     environment:
       - CONNECTION_STRING=Username=admin;Password=admin;Host=db;Port=5432;Database=default
     ports:
-      - "5000:8080"
+      - 5000:8080
     networks:
       - api_net
     depends_on:
@@ -28,7 +41,7 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=default
     ports:
-      - "5432:5432"
+      - 5432:5432
     networks:
       - api_net
     volumes:

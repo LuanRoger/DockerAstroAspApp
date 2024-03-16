@@ -15,15 +15,25 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder =>
     optionsBuilder.UseNpgsql(connectionString);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 WebApplication app = builder.Build();
+
+app.UseCors();
 
 using (IServiceScope serviceScope = app.Services.CreateScope())
 {
     AppDbContext dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.EnsureCreated();
 }
-
-app.UseHttpsRedirection();
 
 RouteGroupBuilder userGroup = app.MapGroup("user");
 userGroup.MapGet("/", (HttpContext _, 

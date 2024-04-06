@@ -6,23 +6,23 @@ namespace Server.Context;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<User> users { get; set; }
+    public DbSet<Client> clients { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>().HasData(new User
+        modelBuilder.Entity<Client>().HasData(new Client
         {
             id = 1,
             name = "User 1",
             email = "user1@user.com"
         },
-        new User
+        new Client
         {
             id = 2,
             name = "User 2",
             email = "user2@user.com"
         },
-        new User
+        new Client
         {
             id = 3,
             name = "User 3",

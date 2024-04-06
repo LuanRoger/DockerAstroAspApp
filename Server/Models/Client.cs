@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models;
 
-[Table("Users")]
-public class User
+[Table("Clients")]
+public class Client
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

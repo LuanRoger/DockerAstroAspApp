@@ -1,6 +1,6 @@
 ﻿namespace Server.Models.Responses;
 
-public class UserResponse
+public class ClientResponse
 {
     public required string name { get; init; }
     public required string email { get; init; }

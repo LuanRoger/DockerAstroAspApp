@@ -15,17 +15,20 @@ public class ClientController : IClientController
 {
     private readonly IRequest<IEnumerable<ClientDto>, GetAllClientsQuery> _getAllClients;
     private readonly IRequest<ClientDto, CreateNewClientCommand> _createNewClient;
+    private readonly IRequest<int, DeleteClientCommand> _deleteClient;
     
     private readonly ClientResponseMapper _clientResponseMapper;
     private readonly IValidator<CreateNewClientRequest> _createNewClientValidator;
 
     public ClientController(IRequest<IEnumerable<ClientDto>, GetAllClientsQuery> getAllClients,
         IRequest<ClientDto, CreateNewClientCommand> createNewClient,
+        IRequest<int, DeleteClientCommand> deleteClient,
         ClientResponseMapper clientResponseMapper,
         IValidator<CreateNewClientRequest> createNewClientValidator)
     {
         _getAllClients = getAllClients;
         _createNewClient = createNewClient;
+        _deleteClient = deleteClient;
         _clientResponseMapper = clientResponseMapper;
         _createNewClientValidator = createNewClientValidator;
     }
@@ -58,5 +61,11 @@ public class ClientController : IClientController
         
         ClientResponse response = _clientResponseMapper.MapClientDtoToClientRequest(clientDto);
         return response;
+    }
+    
+    public async Task<int> DeleteClient(DeleteClientRequest request)
+    {
+        int deletedUserId = await _deleteClient.Handle(new(request.clientId));
+        return deletedUserId;
     }
 }

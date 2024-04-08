@@ -12,9 +12,11 @@ public static class ClientEndpoints
     {
         builer.MapGet("/", GetAllClientsWithPagination);
         builer.MapPost("/", CreateNewClient);
+        builer.MapDelete("/{id:int}", DeleteClient);
 
         return builer;
     }
+
     async private static Task<IResult> CreateNewClient(HttpContext _,
         [FromBody] CreateNewClientRequest body,
         [FromServices] IClientController controller)
@@ -44,5 +46,17 @@ public static class ClientEndpoints
         var response = await controller.GetAllClientsWithPagination(request);
 
         return Results.Ok(response);
+    }
+    
+    async private static Task<IResult> DeleteClient(HttpContext context,
+        [FromRoute] int id,
+        [FromServices] IClientController controller)
+    {
+        int deletedClientId = await controller.DeleteClient(new()
+        {
+            clientId = id
+        });
+
+        return Results.Ok(deletedClientId);
     }
 }

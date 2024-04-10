@@ -23,9 +23,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddMappers()
+    .AddValidators()
     .AddRepositories()
     .AddUseCases()
-    .AddControllers();
+    .AddAppController();
 
 WebApplication app = builder.Build();
 

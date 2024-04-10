@@ -1,18 +1,21 @@
-﻿using Server.Controllers;
+﻿using FluentValidation;
+using Server.Controllers;
 using Server.Controllers.Interfaces;
 using Server.Mappers;
+using Server.Models.Requests;
 using Server.Repositories;
 using Server.UseCases.Client;
 using Server.UseCases.Intefaces;
+using Server.Validations;
 
 namespace Server.Utils;
 
 public static class DiContainer
 {
-    public static IServiceCollection AddController(this IServiceCollection services)
+    public static IServiceCollection AddValidators(this IServiceCollection services)
     {
-        services.AddScoped<IClientController, ClientController>();
-
+        services.AddScoped<IValidator<CreateNewClientRequest>, CreateNewClientValidator>();
+        
         return services;
     }
     
@@ -38,6 +41,13 @@ public static class DiContainer
         services.AddScoped<ClientDtoMapper>();
         services.AddScoped<ClientResponseMapper>();
         
+        return services;
+    }
+    
+    public static IServiceCollection AddAppController(this IServiceCollection services)
+    {
+        services.AddScoped<IClientController, ClientController>();
+
         return services;
     }
 }

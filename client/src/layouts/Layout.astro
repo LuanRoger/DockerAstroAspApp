@@ -1,5 +1,6 @@
 ---
-import '@/styles/global.css'
+import { Toaster } from "@/components/ui/toaster";
+import "@/styles/global.css";
 
 interface Props {
   title: string;
@@ -20,11 +21,6 @@ const { title } = Astro.props;
   </head>
   <body>
     <slot />
+    <Toaster client:load />
   </body>
 </html>
-
-<style is:global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

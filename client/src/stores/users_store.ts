@@ -1,4 +1,4 @@
 import { atom } from "nanostores";
-import type User from "../services/models/user";
+import type Client from "../services/models/client";
 
-export default atom<User[]>([])
+export default atom<Client[]>([])

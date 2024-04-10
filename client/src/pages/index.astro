@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import NavBar from "../components/NavBar.astro";
-import UsersTable from "../components/UsersTable";
+import UsersTable from "../components/ClientsTable";
 import PageSelector from "../components/PageSelector";
 
 const title = "Inicio";
@@ -12,7 +12,7 @@ const title = "Inicio";
   <main class="p-5">
     <div class="flex flex-col gap-3">
       <div class="flex flex-row justify-between items-center">
-        <h1 class="text-3xl font-bold">Usuários</h1>
+        <h1 class="text-3xl font-bold">Clientes</h1>
         <PageSelector client:load/>
       </div>
       <UsersTable client:load/>

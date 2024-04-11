@@ -1,0 +1,76 @@
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Input } from "./ui/input";
+import type React from "react";
+
+const registerNewClientFormSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+});
+
+type RegisterNewClientFormValues = z.infer<typeof registerNewClientFormSchema>;
+
+interface RegisterNewClientFormProps {
+  submitButton: React.ReactNode;
+}
+
+export default function RegisterNewClientForm({
+  submitButton,
+}: RegisterNewClientFormProps) {
+  const form = useForm<RegisterNewClientFormValues>({
+    resolver: zodResolver(registerNewClientFormSchema),
+    defaultValues: {
+        name: "",
+        email: "",
+    }
+  });
+
+  function onSubmit(value: RegisterNewClientFormValues) {
+    console.log(value);
+  }
+
+  return (
+    <Form { ...form }>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormLabel>
+              <FormLabel>Nome</FormLabel>
+              <FormControl>
+                <Input placeholder="Nome" {...field}></Input>
+              </FormControl>
+              <FormMessage />
+            </FormLabel>
+          )}
+        ></FormField>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormLabel>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Email" {...field}></Input>
+              </FormControl>
+              <FormMessage />
+            </FormLabel>
+          )}
+        ></FormField>
+        <div className="flex justify-end">
+        {submitButton}
+        </div>
+      </form>
+    </Form>
+  );
+}

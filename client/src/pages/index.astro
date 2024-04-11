@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import NavBar from "../components/NavBar.astro";
 import UsersTable from "../components/ClientsTable";
 import PageSelector from "../components/PageSelector";
+import RegisterNewClientDialog from "@/components/RegisterNewClientDialog";
 
 const title = "Inicio";
 ---
@@ -13,9 +14,12 @@ const title = "Inicio";
     <div class="flex flex-col gap-3">
       <div class="flex flex-row justify-between items-center">
         <h1 class="text-3xl font-bold">Clientes</h1>
-        <PageSelector client:load/>
+        <PageSelector client:load />
       </div>
-      <UsersTable client:load/>
+      <div class="flex justify-end">
+        <RegisterNewClientDialog client:load />
+      </div>
+      <UsersTable client:load />
     </div>
   </main>
 </Layout>

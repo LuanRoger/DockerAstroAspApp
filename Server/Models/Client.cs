@@ -12,8 +12,8 @@ public class Client
     
     [MaxLength(50)]
     [Required]
-    public required string name { get; init; }
+    public required string name { get; set; }
     
     [Required]
-    public required string email { get; init; }
+    public required string email { get; set; }
 }

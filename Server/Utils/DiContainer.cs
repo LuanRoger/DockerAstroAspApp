@@ -15,6 +15,7 @@ public static class DiContainer
     public static IServiceCollection AddValidators(this IServiceCollection services)
     {
         services.AddScoped<IValidator<CreateNewClientRequest>, CreateNewClientValidator>();
+        services.AddScoped<IValidator<UpdateClientRequest>, UpdateClientValidator>();
         
         return services;
     }
@@ -23,6 +24,7 @@ public static class DiContainer
     {
         services.AddScoped<IRequest<IEnumerable<ClientDto>, GetAllClientsQuery>, GetAllClients>();
         services.AddScoped<IRequest<ClientDto, CreateNewClientCommand>, CreateNewClient>();
+        services.AddScoped<IRequest<ClientDto?, UpdateClientCommand>, UpdateClient>();
         services.AddScoped<IRequest<int, DeleteClientCommand>, DeleteClient>();
         
         return services;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Server.Controllers.Exceptions;
 using Server.Controllers.Interfaces;
+using Server.Exceptions;
 using Server.Models.Requests;
 using Server.Models.Responses;
 
@@ -12,9 +12,27 @@ public static class ClientEndpoints
     {
         builer.MapGet("/", GetAllClientsWithPagination);
         builer.MapPost("/", CreateNewClient);
+        builer.MapPut("/{id:int}", UpdateClient);
         builer.MapDelete("/{id:int}", DeleteClient);
 
         return builer;
+    }
+    async private static Task<IResult> UpdateClient(HttpContext context,
+        [FromRoute] int id,
+        [FromBody] UpdateClientRequest body,
+        [FromServices] IClientController controller)
+    {
+        ClientResponse response;
+        try
+        {
+            response = await controller.UpdateClient(id, body);
+        }
+        catch (ClientNotFoundException)
+        {
+            return Results.NotFound();
+        }
+
+        return Results.Ok(response);
     }
 
     async private static Task<IResult> CreateNewClient(HttpContext _,

@@ -1,5 +1,6 @@
 import axios from "axios";
 import type Client from "./models/client";
+import type { CreateClient } from "./models/create_client";
 
 const baseUrl = import.meta.env.PUBLIC_API_ENDPOINT;
 const usersEndpoint = `${baseUrl}/user`;
@@ -22,4 +23,14 @@ export async function deleteClient(clientId: number): Promise<boolean> {
   const response = await axios.delete(`${usersEndpoint}/${clientId}`);
 
   return response.status === 200 && response.data === clientId;
+}
+
+export async function createClient(client: CreateClient): Promise<Client | null> {
+  const response = await axios.post(usersEndpoint, client);
+
+  if(response.status !== 201 && response.status !== 200) {
+    return null;
+  }
+
+  return response.data;
 }

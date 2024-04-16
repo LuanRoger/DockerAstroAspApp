@@ -4,16 +4,11 @@ import { useStore } from "@nanostores/react";
 import usersStore from "../stores/users_store";
 import pageStore from "../stores/page_store";
 import type Client from "../services/models/client";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "./ui/table";
 import ClientTableRow from "./ClientTableRow";
+import { Skeleton } from "./ui/skeleton";
 
-export default function UserTable() {
+export default function ClientsTable() {
   const $page = useStore(pageStore);
   const $users = useStore(usersStore);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +24,7 @@ export default function UserTable() {
   }, [$page]);
 
   if (isLoading) {
-    return <UsersTableLoading />;
+    return <ClientsTableLoading />;
   }
 
   return (
@@ -51,11 +46,21 @@ export default function UserTable() {
   );
 }
 
-function UsersTableLoading() {
+function ClientsTableLoading() {
+  const skeletonRowLoading = <Skeleton className="w-full h-20" />;
+  const skeletonHeaderLoading = <Skeleton className="w-20 h-5"/>;
+
   return (
-    <div className="flex flex-row justify-center font-bold">
-      <span className="animate-spin">⌛</span>
-      <h1>Carregando...</h1>
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-row justify-between">
+        {skeletonHeaderLoading}
+        {skeletonHeaderLoading}
+        {skeletonHeaderLoading}
+        {skeletonHeaderLoading}
+      </div>
+      {skeletonRowLoading}
+      {skeletonRowLoading}
+      {skeletonRowLoading}
     </div>
   );
 }

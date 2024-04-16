@@ -2,7 +2,6 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormLabel,
   FormMessage,
@@ -10,7 +9,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Input } from "./ui/input";
-import type React from "react";
+import { Button } from "./ui/button";
+import type { RegisterClient } from "@/lib/interfaces/register_client";
 
 const registerNewClientFormSchema = z.object({
   name: z.string().min(1),
@@ -20,11 +20,11 @@ const registerNewClientFormSchema = z.object({
 type RegisterNewClientFormValues = z.infer<typeof registerNewClientFormSchema>;
 
 interface RegisterNewClientFormProps {
-  submitButton: React.ReactNode;
+  onSubmitClick: (values: RegisterClient) => void
 }
 
 export default function RegisterNewClientForm({
-  submitButton,
+  onSubmitClick,
 }: RegisterNewClientFormProps) {
   const form = useForm<RegisterNewClientFormValues>({
     resolver: zodResolver(registerNewClientFormSchema),
@@ -35,7 +35,7 @@ export default function RegisterNewClientForm({
   });
 
   function onSubmit(value: RegisterNewClientFormValues) {
-    console.log(value);
+    onSubmitClick(value);
   }
 
   return (
@@ -68,7 +68,9 @@ export default function RegisterNewClientForm({
           )}
         ></FormField>
         <div className="flex justify-end">
-        {submitButton}
+        <Button type="submit">
+            Cadastrar
+          </Button>
         </div>
       </form>
     </Form>

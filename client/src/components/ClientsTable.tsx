@@ -30,6 +30,20 @@ export default function ClientsTable() {
   function onClientDeleted(clientId: number) {
     usersStore.set($users.filter((client: Client) => client.id !== clientId));
   }
+  function onClientUpdated(newClientInfo: Client) {
+    usersStore.set(
+      $users.map((client: Client) => {
+        if (client.id === newClientInfo.id) {
+          return {
+            id: newClientInfo.id,
+            name: newClientInfo.name,
+            email: newClientInfo.email,
+          } satisfies Client;
+        }
+        return client;
+      })
+    );
+  }
 
   return (
     <Table>
@@ -43,7 +57,11 @@ export default function ClientsTable() {
       </TableHeader>
       <TableBody>
         {$users.map((client: Client) => (
-          <ClientTableRow client={client} onClientDeleted={onClientDeleted} />
+          <ClientTableRow
+            client={client}
+            onClientDeleted={onClientDeleted}
+            onClientUpdated={onClientUpdated}
+          />
         ))}
       </TableBody>
     </Table>

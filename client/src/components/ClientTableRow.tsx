@@ -6,9 +6,11 @@ import { toast } from "./ui/use-toast";
 
 interface ClientTableRowProps {
     client: Client;
+    onClientDeleted?: (clientId: number) => void | undefined;
+    onClientUpdated?: (client: Client) => void | undefined;
 }
 
-export default function ClientTableRow({ client }: ClientTableRowProps) {
+export default function ClientTableRow({ client, onClientDeleted, onClientUpdated }: ClientTableRowProps) {
   return (
     <TableRow>
       <TableCell>{client.id}</TableCell>
@@ -24,6 +26,7 @@ export default function ClientTableRow({ client }: ClientTableRowProps) {
                     title: "Cliente deletado",
                     description: `Cliente com ID: ${client.id} deletado com sucesso.`,
                 });
+                onClientDeleted?.(client.id);
             }
             else {
                 toast({

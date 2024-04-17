@@ -20,11 +20,15 @@ export default function ClientsTable() {
     }
 
     setIsLoading(true);
-    Promise.all([fetchUsers($page)]).then(() => setIsLoading(false));
+    fetchUsers($page).then(() => setIsLoading(false));
   }, [$page]);
 
   if (isLoading) {
     return <ClientsTableLoading />;
+  }
+
+  function onClientDeleted(clientId: number) {
+    usersStore.set($users.filter((client: Client) => client.id !== clientId));
   }
 
   return (
@@ -39,7 +43,7 @@ export default function ClientsTable() {
       </TableHeader>
       <TableBody>
         {$users.map((client: Client) => (
-          <ClientTableRow client={client} />
+          <ClientTableRow client={client} onClientDeleted={onClientDeleted} />
         ))}
       </TableBody>
     </Table>
@@ -48,7 +52,7 @@ export default function ClientsTable() {
 
 function ClientsTableLoading() {
   const skeletonRowLoading = <Skeleton className="w-full h-20" />;
-  const skeletonHeaderLoading = <Skeleton className="w-20 h-5"/>;
+  const skeletonHeaderLoading = <Skeleton className="w-20 h-5" />;
 
   return (
     <div className="flex flex-col gap-5">

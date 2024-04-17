@@ -6,11 +6,12 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import type { RegisterClient } from "@/lib/interfaces/register_client";
+import { LoaderCircle } from "lucide-react";
 
 const registerNewClientFormSchema = z.object({
   name: z.string().min(1),
@@ -20,18 +21,20 @@ const registerNewClientFormSchema = z.object({
 type RegisterNewClientFormValues = z.infer<typeof registerNewClientFormSchema>;
 
 interface RegisterNewClientFormProps {
-  onSubmitClick: (values: RegisterClient) => void
+  onSubmitClick: (values: RegisterClient) => void;
+  isLoadingButton?: boolean;
 }
 
 export default function RegisterNewClientForm({
   onSubmitClick,
+  isLoadingButton = false,
 }: RegisterNewClientFormProps) {
   const form = useForm<RegisterNewClientFormValues>({
     resolver: zodResolver(registerNewClientFormSchema),
     defaultValues: {
-        name: "",
-        email: "",
-    }
+      name: "",
+      email: "",
+    },
   });
 
   function onSubmit(value: RegisterNewClientFormValues) {
@@ -39,7 +42,7 @@ export default function RegisterNewClientForm({
   }
 
   return (
-    <Form { ...form }>
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
@@ -68,9 +71,14 @@ export default function RegisterNewClientForm({
           )}
         ></FormField>
         <div className="flex justify-end">
-        <Button type="submit">
-            Cadastrar
-          </Button>
+          {isLoadingButton ? (
+            <Button disabled>
+              <LoaderCircle className="mr-3 animate-spin" />
+              Carregando...
+            </Button>
+          ) : (
+            <Button type="submit">Cadastrar</Button>
+          )}
         </div>
       </form>
     </Form>

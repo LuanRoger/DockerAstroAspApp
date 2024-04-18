@@ -38,7 +38,7 @@ using (IServiceScope serviceScope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 
-RouteGroupBuilder userGroup = app.MapGroup("user");
-userGroup.MapClientEndpoints();
+RouteGroupBuilder clientGroup = app.MapGroup("client");
+clientGroup.MapClientEndpoints();
 
 app.Run();

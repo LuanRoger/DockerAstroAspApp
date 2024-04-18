@@ -11,7 +11,7 @@ using Server.Context;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240303190341_Initial")]
+    [Migration("20240417130633_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace Server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Server.Models.User", b =>
+            modelBuilder.Entity("Server.Models.Client", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -43,26 +43,26 @@ namespace Server.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Clients");
 
                     b.HasData(
                         new
                         {
                             id = 1,
-                            email = "user1@user.com",
-                            name = "User 1"
+                            email = "client1@client.com",
+                            name = "Client 1"
                         },
                         new
                         {
                             id = 2,
-                            email = "user2@user.com",
-                            name = "User 2"
+                            email = "client2@client.com",
+                            name = "Client 2"
                         },
                         new
                         {
                             id = 3,
-                            email = "user3@user.com",
-                            name = "User 3"
+                            email = "client3@client.com",
+                            name = "Client 3"
                         });
                 });
 #pragma warning restore 612, 618

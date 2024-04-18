@@ -17,7 +17,7 @@ public static class ClientEndpoints
 
         return builer;
     }
-    async private static Task<IResult> UpdateClient(HttpContext context,
+    private static async Task<IResult> UpdateClient(HttpContext context,
         [FromRoute] int id,
         [FromBody] UpdateClientRequest body,
         [FromServices] IClientController controller)
@@ -35,7 +35,7 @@ public static class ClientEndpoints
         return Results.Ok(response);
     }
 
-    async private static Task<IResult> CreateNewClient(HttpContext _,
+    private static async Task<IResult> CreateNewClient(HttpContext _,
         [FromBody] CreateNewClientRequest body,
         [FromServices] IClientController controller)
     {
@@ -49,9 +49,9 @@ public static class ClientEndpoints
             return Results.BadRequest(e.Message);
         }
         
-        return Results.Created($"/user/{response.email}", response);
+        return Results.Created($"/client/{response.id}", response);
     }
-    async private static Task<IResult> GetAllClientsWithPagination(HttpContext context, 
+    private static async Task<IResult> GetAllClientsWithPagination(HttpContext context, 
         [FromQuery] int page,
         [FromQuery] int pageSize,
         [FromServices] IClientController controller)
@@ -66,7 +66,7 @@ public static class ClientEndpoints
         return Results.Ok(response);
     }
     
-    async private static Task<IResult> DeleteClient(HttpContext context,
+    private static async Task<IResult> DeleteClient(HttpContext context,
         [FromRoute] int id,
         [FromServices] IClientController controller)
     {

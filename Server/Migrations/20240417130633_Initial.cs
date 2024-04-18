@@ -14,7 +14,7 @@ namespace Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Clients",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -24,17 +24,17 @@ namespace Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.id);
+                    table.PrimaryKey("PK_Clients", x => x.id);
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
+                table: "Clients",
                 columns: new[] { "id", "email", "name" },
                 values: new object[,]
                 {
-                    { 1, "user1@user.com", "User 1" },
-                    { 2, "user2@user.com", "User 2" },
-                    { 3, "user3@user.com", "User 3" }
+                    { 1, "client1@client.com", "Client 1" },
+                    { 2, "client2@client.com", "Client 2" },
+                    { 3, "client3@client.com", "Client 3" }
                 });
         }
 
@@ -42,7 +42,7 @@ namespace Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Clients");
         }
     }
 }

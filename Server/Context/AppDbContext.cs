@@ -13,20 +13,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Client>().HasData(new Client
         {
             id = 1,
-            name = "User 1",
-            email = "user1@user.com"
+            name = "Client 1",
+            email = "client1@client.com"
         },
         new Client
         {
             id = 2,
-            name = "User 2",
-            email = "user2@user.com"
+            name = "Client 2",
+            email = "client2@client.com"
         },
         new Client
         {
             id = 3,
-            name = "User 3",
-            email = "user3@user.com"
+            name = "Client 3",
+            email = "client3@client.com"
         });
     }
 }

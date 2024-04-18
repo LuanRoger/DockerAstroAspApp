@@ -1,39 +1,35 @@
-import { z } from "zod";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
+  clientFormSchema,
+  type ClientFormValues,
+} from "@/lib/schemas/client_form_schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Form, FormControl, FormField, FormLabel, FormMessage } from "./ui/form";
+import type Client from "@/services/models/client";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import type { RegisterClient } from "@/lib/interfaces/register_client";
-import { LoaderCircle } from "lucide-react";
-import { clientFormSchema, type ClientFormValues } from "@/lib/schemas/client_form_schema";
 import AsyncFormButton from "./AsyncFormButton";
 
-interface RegisterNewClientFormProps {
-  onSubmitClick: (values: RegisterClient) => void;
+interface UpdateClientFormProps {
+  clientToUpdate: Client;
+  onSubmitClick?: (values: ClientFormValues) => void;
   isLoadingButton?: boolean;
 }
 
-export default function RegisterNewClientForm({
+export default function UpdateClientForm({
   onSubmitClick,
   isLoadingButton = false,
-}: RegisterNewClientFormProps) {
+  clientToUpdate,
+}: UpdateClientFormProps) {
   const form = useForm<ClientFormValues>({
     resolver: zodResolver(clientFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: clientToUpdate.name,
+      email: clientToUpdate.email,
     },
   });
 
   function onSubmit(value: ClientFormValues) {
-    onSubmitClick(value);
+    onSubmitClick?.(value);
   }
 
   return (
@@ -66,7 +62,7 @@ export default function RegisterNewClientForm({
           )}
         ></FormField>
         <div className="flex justify-end">
-          <AsyncFormButton isLoading={isLoadingButton} text="Cadastrar"/>
+          <AsyncFormButton isLoading={isLoadingButton} text="Editar"/>
         </div>
       </form>
     </Form>

@@ -5,15 +5,14 @@ import UsersTable from "../components/ClientsTable";
 import PageSelector from "../components/PageSelector";
 import RegisterNewClientDialog from "@/components/RegisterNewClientDialog";
 
-const title = "Inicio";
+const title = "Clientes";
 ---
 
 <Layout title={title}>
   <NavBar title={title} />
   <main class="p-5">
     <div class="flex flex-col gap-3">
-      <div class="flex flex-row justify-between items-center">
-        <h1 class="text-3xl font-bold">Clientes</h1>
+      <div class="flex flex-row justify-end">
         <PageSelector client:load />
       </div>
       <div class="flex justify-end">

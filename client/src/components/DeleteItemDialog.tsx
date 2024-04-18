@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Trash2 } from "lucide-react";
-import { DialogFooter, DialogHeader } from "./ui/dialog";
+import { DialogHeader } from "./ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,

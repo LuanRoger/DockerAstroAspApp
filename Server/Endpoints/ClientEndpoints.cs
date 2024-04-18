@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Server.Controllers.Exceptions;
 using Server.Controllers.Interfaces;
+using Server.Exceptions;
 using Server.Models.Requests;
 using Server.Models.Responses;
 
@@ -12,12 +12,30 @@ public static class ClientEndpoints
     {
         builer.MapGet("/", GetAllClientsWithPagination);
         builer.MapPost("/", CreateNewClient);
+        builer.MapPut("/{id:int}", UpdateClient);
         builer.MapDelete("/{id:int}", DeleteClient);
 
         return builer;
     }
+    private static async Task<IResult> UpdateClient(HttpContext context,
+        [FromRoute] int id,
+        [FromBody] UpdateClientRequest body,
+        [FromServices] IClientController controller)
+    {
+        ClientResponse response;
+        try
+        {
+            response = await controller.UpdateClient(id, body);
+        }
+        catch (ClientNotFoundException)
+        {
+            return Results.NotFound();
+        }
 
-    async private static Task<IResult> CreateNewClient(HttpContext _,
+        return Results.Ok(response);
+    }
+
+    private static async Task<IResult> CreateNewClient(HttpContext _,
         [FromBody] CreateNewClientRequest body,
         [FromServices] IClientController controller)
     {
@@ -31,9 +49,9 @@ public static class ClientEndpoints
             return Results.BadRequest(e.Message);
         }
         
-        return Results.Created($"/user/{response.email}", response);
+        return Results.Created($"/client/{response.id}", response);
     }
-    async private static Task<IResult> GetAllClientsWithPagination(HttpContext context, 
+    private static async Task<IResult> GetAllClientsWithPagination(HttpContext context, 
         [FromQuery] int page,
         [FromQuery] int pageSize,
         [FromServices] IClientController controller)
@@ -48,7 +66,7 @@ public static class ClientEndpoints
         return Results.Ok(response);
     }
     
-    async private static Task<IResult> DeleteClient(HttpContext context,
+    private static async Task<IResult> DeleteClient(HttpContext context,
         [FromRoute] int id,
         [FromServices] IClientController controller)
     {

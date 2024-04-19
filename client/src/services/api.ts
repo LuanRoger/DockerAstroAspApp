@@ -4,10 +4,10 @@ import type { CreateClient } from "./models/create_client";
 import type { UpdateClient } from "./models/update_client";
 
 const baseUrl = import.meta.env.PUBLIC_API_ENDPOINT;
-const usersEndpoint = `${baseUrl}/user`;
+const clientsEndpoint = `${baseUrl}/client`;
 
 export async function getUsers(page: number): Promise<Client[]> {
-  const response = await axios.get<Client[]>(usersEndpoint, {
+  const response = await axios.get<Client[]>(clientsEndpoint, {
     params: {
       page: page,
       pageSize: 10,
@@ -21,7 +21,7 @@ export async function getUsers(page: number): Promise<Client[]> {
 }
 
 export async function updateClient(clientId: number, newClientInfo: UpdateClient): Promise<Client | null> {
-  const response = await axios.put(`${usersEndpoint}/${clientId}`, newClientInfo);
+  const response = await axios.put(`${clientsEndpoint}/${clientId}`, newClientInfo);
 
   if(response.status !== 200) {
     return null;
@@ -31,13 +31,13 @@ export async function updateClient(clientId: number, newClientInfo: UpdateClient
 }
 
 export async function deleteClient(clientId: number): Promise<boolean> {
-  const response = await axios.delete(`${usersEndpoint}/${clientId}`);
+  const response = await axios.delete(`${clientsEndpoint}/${clientId}`);
 
   return response.status === 200 && response.data === clientId;
 }
 
 export async function createClient(client: CreateClient): Promise<Client | null> {
-  const response = await axios.post(usersEndpoint, client);
+  const response = await axios.post(clientsEndpoint, client);
 
   if(response.status !== 201 && response.status !== 200) {
     return null;
